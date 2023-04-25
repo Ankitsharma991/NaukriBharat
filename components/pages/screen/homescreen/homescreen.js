@@ -9,13 +9,15 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import { Picker } from "@react-native-picker/picker";
 import SelectDropdown from 'react-native-select-dropdown'
-
+import User from "../profile/user/user";
 
 export default function HomeScreen() {
   const profession = ["actor", "singer", "dancer", "model", "musician", "comedian", "artist", "writer", "director", "producer", "designer", "photographer", "editor", "barber","police","plumber","doctor","teacher","engineer","lawyer","accountant","architect","farmer","chef","pilot","nurse","firefighter","scientist","astronaut","judge","policeman",
   "labour"];
   return (
+    
     <View style={styles.container}>
+      
       {/* Menu icon on the upper left */}
       <TouchableOpacity style={styles.menuButton}>
         <Ionicons name="menu-outline" size={30} color="black" />
@@ -26,11 +28,11 @@ export default function HomeScreen() {
         <Ionicons name="person-circle-outline" size={30} color="black" />
       </TouchableOpacity>
 
-      {/* Body of the home screen */}
-      <View style={styles.body}>
-        <Text style={styles.subtitle}>This is the Home Screen</Text>
-      </View>
+      <User/>
+
+      {/* Body of the home screen */} 
       <View style={styles.professionFilter}>
+
   
 
         <SelectDropdown
@@ -50,7 +52,6 @@ export default function HomeScreen() {
           }}
         />
             
-
       </View>
       <View style={styles.postRequirement}>
         <TextInput placeholder="Post a requirement" style={styles.inputField} />
@@ -58,7 +59,7 @@ export default function HomeScreen() {
               <Text style={styles.postText}>Post</Text>
             </TouchableOpacity>
       </View>
-      
+ 
     </View>
   );
 }
@@ -69,6 +70,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingTop: 50,
     position: "relative",
+    backgroundColor: "#fff",
   },
   menuButton: {
     position: "absolute",
@@ -83,7 +85,7 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   body: {
-    flex: 1,
+    flex: 2,
     alignItems: "center",
     justifyContent: "center",
   },
@@ -100,9 +102,9 @@ const styles = StyleSheet.create({
   },
 
   professionFilter: {
-    right: 55,
+    right: 5,
     padding: 10,
-    marginBottom: 1500,
+    marginBottom: 200,
     
 
   },

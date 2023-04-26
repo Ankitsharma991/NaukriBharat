@@ -11,23 +11,21 @@ const MyStack = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-      <Stack.Screen
-          name="HomeScreen"
-          component={HomeScreen}
-          options={{ title: "NokriBharat" }}
-        />
         <Stack.Screen
           name="SignupPage"
           component={SignupPage}
           options={{ title: "Welcome" }}
         />
         <Stack.Screen
+          name="HomeScreen"
+          component={HomeScreen}
+          options={{ title: "NokriBharat" }}
+        />
+        <Stack.Screen
           name="LoginPage"
           component={LoginPage}
           options={{ title: "LoginPage" }}
         />
-
-
       </Stack.Navigator>
     </NavigationContainer>
   );

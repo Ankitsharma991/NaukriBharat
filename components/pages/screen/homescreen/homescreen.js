@@ -7,7 +7,6 @@ import {
   TextInput,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { Picker } from "@react-native-picker/picker";
 import SelectDropdown from "react-native-select-dropdown";
 import User from "../profile/user/user";
 import { Alert } from "react-native";

@@ -1,73 +1,149 @@
-import React, { useState } from 'react';
-import { StyleSheet, TextInput, View, Button, Text } from 'react-native';
-import { Picker } from '@react-native-picker/picker';
+// Import necessary modules from the required libraries
+import React, { useState } from "react";
+import { StyleSheet, TextInput, View, Button, Text } from "react-native";
+import { Picker } from "@react-native-picker/picker";
+import firebase from "../../../database/firebase";
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { getFirestore, collection, addDoc } from "firebase/firestore";
+import { getStorage, ref, uploadBytes } from "firebase/storage";
+import "firebase/firestore";
 
-const professions = ['Doctor', 'Plumber', 'Teacher', 'Engineer', 'Chef'];
+// Define a list of professions
+const professions = ["Doctor", "Plumber", "Teacher", "Engineer", "Chef"];
 
+// Initialize Firebase
+const firebaseStore = getFirestore(firebase);
+const auth = getAuth(firebase);
+const storage = getStorage(firebase);
+
+// Create a component for registration form
 export default function RegistrationForm() {
-  const [fullName, setFullName] = useState('');
-  const [address, setAddress] = useState('');
-  const [contactNumber, setContactNumber] = useState('');
-  const [password, setPassword] = useState('');
-  const [profession, setProfession] = useState('');
-  const [email, setEmail] = useState('');
+  // Define a state for the form data
+  const [data, setData] = useState({
+    fullName: "",
+    address: "",
+    contactNumber: "",
+    password: "",
+    profession: "",
+    email: "",
+  });
 
-  const handleRegister = () => {
-    // handle registration logic here
-    console.log('Full Name:', fullName);
-    console.log('Address:', address);
-    console.log('Contact Number:', contactNumber);
-    console.log('Password:', password);
-    console.log('Profession:', profession);
-    console.log('Email:', email);
+  // Destructure the form data from the state
+  const { fullName, address, contactNumber, password, profession, email } =
+    data;
+
+  // Handle form submission on button press
+  const handleRegisterFormSubmit = () => {
+    // Check if all fields are filled
+    if (
+      fullName &&
+      address &&
+      contactNumber &&
+      password &&
+      profession &&
+      email
+    ) {
+      // Create user with email and password
+      createUserWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+          // Get user from user credentials
+          const user = userCredential.user;
+          console.log("User registered successfully!");
+          // Add user details to the Firestore collection
+          addDoc(collection(firebaseStore, "users"), {
+            fullName: fullName,
+            address: address,
+            contactNumber: contactNumber,
+            password: password,
+            profession: profession,
+            email: email,
+          })
+            .then((docRef) => {
+              console.log("Document written with ID: ", docRef.id);
+              // add navigation logic here to redirect to another page
+            })
+            .catch((error) => {
+              console.error("Error adding document: ", error);
+            });
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          console.error("Error registering user: ", error);
+        });
+    } else {
+      console.error("Please fill all the fields");
+    }
   };
 
+  // Handle input change on text input change
+  const handleRegistrationFormInputChange = (inputName, inputValue) => {
+    const updatedFormState = { ...data };
+    updatedFormState[inputName] = inputValue;
+    setData(updatedFormState);
+  };
+
+  // Render the registration form
   return (
     <View style={styles.container}>
       <TextInput
         style={styles.input}
         placeholder="Full Name"
-        onChangeText={(text) => setFullName(text)}
+        onChangeText={(text) =>
+          handleRegistrationFormInputChange("fullName", text)
+        }
         value={fullName}
       />
       <TextInput
         style={styles.input}
         placeholder="Address"
-        onChangeText={(text) => setAddress(text)}
+        onChangeText={(text) =>
+          handleRegistrationFormInputChange("address", text)
+        }
         value={address}
       />
       <TextInput
         style={styles.input}
         placeholder="Contact Number"
-        onChangeText={(text) => setContactNumber(text)}
+        onChangeText={(text) =>
+          handleRegistrationFormInputChange("contactNumber", text)
+        }
         value={contactNumber}
         keyboardType="phone-pad"
       />
       <TextInput
         style={styles.input}
         placeholder="Password"
-        onChangeText={(text) => setPassword(text)}
+        onChangeText={(text) =>
+          handleRegistrationFormInputChange("password", text)
+        }
         value={password}
         secureTextEntry={true}
       />
+
       <TextInput
         style={styles.input}
         placeholder="Email"
-        onChangeText={(text) => setEmail(text)}
+        onChangeText={(text) =>
+          handleRegistrationFormInputChange("email", text)
+        }
         value={email}
         keyboardType="email-address"
       />
-      
+
       <Text style={styles.professionText}>Choose your profession:</Text>
       <Picker
         style={styles.picker}
         selectedValue={profession}
-        onValueChange={(itemValue, itemIndex) => setProfession(itemValue)}>
+        onValueChange={(itemValue, itemIndex) =>
+          handleRegistrationFormInputChange("profession", itemValue)
+        }
+      >
         {professions.map((item, index) => (
           <Picker.Item key={index} label={item} value={item} />
         ))}
       </Picker>
-      <Button title="Register" onPress={handleRegister} />
+      <Button title="Register" onPress={handleRegisterFormSubmit} />
     </View>
   );
 }
@@ -75,23 +151,23 @@ export default function RegistrationForm() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     padding: 20,
   },
   input: {
     borderWidth: 1,
-    borderColor: '#ccc',
+    borderColor: "#ccc",
     padding: 10,
     marginVertical: 10,
-    width: '100%',
+    width: "100%",
   },
   professionText: {
     marginVertical: 10,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   picker: {
-    width: '100%',
+    width: "100%",
     height: 50,
     marginBottom: 10,
   },

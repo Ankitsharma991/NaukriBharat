@@ -7,6 +7,9 @@ import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { getFirestore, collection, addDoc } from "firebase/firestore";
 import { getStorage, ref, uploadBytes } from "firebase/storage";
 import "firebase/firestore";
+import { useNavigation } from '@react-navigation/native';
+
+
 
 // Define a list of professions
 const professions = ["Doctor", "Plumber", "Teacher", "Engineer", "Chef"];
@@ -18,6 +21,8 @@ const storage = getStorage(firebase);
 
 // Create a component for registration form
 export default function RegistrationForm() {
+  const navigation = useNavigation();
+
   // Define a state for the form data
   const [data, setData] = useState({
     fullName: "",
@@ -60,7 +65,8 @@ export default function RegistrationForm() {
           })
             .then((docRef) => {
               console.log("Document written with ID: ", docRef.id);
-              // add navigation logic here to redirect to another page
+              navigation.navigate('LoginPage'); // navigate to the login screen
+
             })
             .catch((error) => {
               console.error("Error adding document: ", error);
@@ -81,6 +87,10 @@ export default function RegistrationForm() {
     const updatedFormState = { ...data };
     updatedFormState[inputName] = inputValue;
     setData(updatedFormState);
+  };
+
+  const handleLoginButtonPress = () => {
+    navigation.navigate('LoginPage'); // navigate to the login screen
   };
 
   // Render the registration form
@@ -144,6 +154,12 @@ export default function RegistrationForm() {
         ))}
       </Picker>
       <Button title="Register" onPress={handleRegisterFormSubmit} />
+      <Text style={styles.professionText}>Already have an account?</Text>
+      <Text style={styles.professionText}>Login here:</Text>
+  
+
+      <Button title="Login" onPress={handleLoginButtonPress} />
+
     </View>
   );
 }

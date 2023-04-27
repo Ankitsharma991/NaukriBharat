@@ -70,6 +70,11 @@ const LoginPage = () => {
         title="Register"
         onPress={() => navigation.navigate("SignupPage")}
       />
+      <Text style={styles.professionText}>Continue without login:</Text>
+      <Button
+        title="Continue"
+        onPress={() => navigation.navigate("HomeScreen")}
+      />
     </View>
   );
 };

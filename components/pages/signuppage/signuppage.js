@@ -1,18 +1,25 @@
-// Import necessary modules from the required libraries
 import React, { useState } from "react";
-import { StyleSheet, TextInput, View, Button, Text } from "react-native";
+import {
+  StyleSheet,
+  TextInput,
+  View,
+  Button,
+  Text,
+  SafeAreaView,
+  Alert,
+} from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import firebase from "../../../database/firebase";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { getFirestore, collection, addDoc } from "firebase/firestore";
 import { getStorage, ref, uploadBytes } from "firebase/storage";
 import "firebase/firestore";
-import { useNavigation } from '@react-navigation/native';
-
-
+import { useNavigation } from "@react-navigation/native";
+import { TouchableOpacity } from "react-native";
+import ImagePicker from "react-native-image-picker";
 
 // Define a list of professions
-const professions = ["Doctor", "Plumber", "Teacher", "Engineer", "Chef"];
+const professions = ["Actor", "Administrator"];
 
 // Initialize Firebase
 const firebaseStore = getFirestore(firebase);
@@ -31,7 +38,34 @@ export default function RegistrationForm() {
     password: "",
     profession: "",
     email: "",
+    profilePicture: "",
   });
+
+  const [image, setImage] = useState("");
+
+  const handleImageUpload = async () => {
+    try {
+      // Open the file picker
+      const imagePickerResponse = await ImagePicker.launchImageLibraryAsync();
+
+      if (!imagePickerResponse.cancelled) {
+        // Create a reference to the location where we want to store our image
+        const imageRef = ref(storage, "images/" + Date.now().toString());
+
+        // Upload the image file to Firebase Storage
+        const snapshot = await uploadBytes(imageRef, imagePickerResponse.uri);
+
+        // Get the download URL for the image
+        const downloadURL = await snapshot.ref.getDownloadURL();
+
+        // Set the image URL in our form data state
+        setData({ ...data, profilePicture: downloadURL });
+        setImage(downloadURL);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   // Destructure the form data from the state
   const { fullName, address, contactNumber, password, profession, email } =
@@ -54,6 +88,7 @@ export default function RegistrationForm() {
           // Get user from user credentials
           const user = userCredential.user;
           console.log("User registered successfully!");
+
           // Add user details to the Firestore collection
           addDoc(collection(firebaseStore, "users"), {
             fullName: fullName,
@@ -62,11 +97,11 @@ export default function RegistrationForm() {
             password: password,
             profession: profession,
             email: email,
+            imageUrl: imageRef.fullPath,
           })
             .then((docRef) => {
               console.log("Document written with ID: ", docRef.id);
-              navigation.navigate('LoginPage'); // navigate to the login screen
-
+              navigation.navigate("LoginPage"); // navigate to the login screen
             })
             .catch((error) => {
               console.error("Error adding document: ", error);
@@ -90,12 +125,12 @@ export default function RegistrationForm() {
   };
 
   const handleLoginButtonPress = () => {
-    navigation.navigate('LoginPage'); // navigate to the login screen
+    navigation.navigate("LoginPage"); // navigate to the login screen
   };
 
   // Render the registration form
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <TextInput
         style={styles.input}
         placeholder="Full Name"
@@ -141,6 +176,9 @@ export default function RegistrationForm() {
         keyboardType="email-address"
       />
 
+      <Text style={styles.professionText}>Choose your profile picture:</Text>
+      <Button title="Select Image" onPress={handleImageUpload} />
+
       <Text style={styles.professionText}>Choose your profession:</Text>
       <Picker
         style={styles.picker}
@@ -156,11 +194,9 @@ export default function RegistrationForm() {
       <Button title="Register" onPress={handleRegisterFormSubmit} />
       <Text style={styles.professionText}>Already have an account?</Text>
       <Text style={styles.professionText}>Login here:</Text>
-  
 
       <Button title="Login" onPress={handleLoginButtonPress} />
-
-    </View>
+    </SafeAreaView>
   );
 }
 

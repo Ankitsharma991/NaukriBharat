@@ -14,11 +14,11 @@ const User = () => {
   const [isLoading, setLoading] = useState(true);
   const [data, setData] = useState([]);
 
-  // Fetch data from API using async/await
+  // Fetch data from API using async/await  syntax
   const fetchApiData = async () => {
     try {
       const response = await fetch(
-        "http://www.omdbapi.com/?s=batman&apikey=39df4eee"
+        "http://www.omdbapi.com/?s=nepal&apikey=39df4eee"
       );
       const jsonData = await response.json();
       setData(jsonData.Search);

@@ -63,19 +63,23 @@ export default function HomeScreen() {
     <View style={styles.container}>
       <View style={styles.header}>
         {/* <View style={styles.headerItemsContainer}> */}
-          <TouchableOpacity
-            style={styles.menuButton}
-            onPress={handleMenuButtonClick}
-          >
-            <Ionicons name="menu-outline" size={40} color="black" />
-          </TouchableOpacity>
-          <TextInput
-            placeholder="Post a requirement"
-            style={styles.inputField}
-          />
-          <Text style={styles.postText}>Post</Text>
-          <Ionicons name="person-circle-outline" size={40} color="black" />
-        </View>
+        <TouchableOpacity
+          style={styles.menuButton}
+          onPress={handleMenuButtonClick}
+        >
+          <Ionicons name="menu-outline" size={40} color="black" />
+        </TouchableOpacity>
+        <TextInput placeholder="Post a requirement" style={styles.inputField} />
+        <Text onPress={handlePostButtonClick} style={styles.postText}>
+          Post
+        </Text>
+        <Ionicons
+          onPress={handleProfileButtonClick}
+          name="person-circle-outline"
+          size={40}
+          color="black"
+        />
+      </View>
       {/* </View> */}
       {/* Menu icon on the upper left */}
 

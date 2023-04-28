@@ -131,96 +131,202 @@ export default function RegistrationForm() {
   // Render the registration form
   return (
     <SafeAreaView style={styles.container}>
-      <TextInput
-        style={styles.input}
-        placeholder="Full Name"
-        onChangeText={(text) =>
-          handleRegistrationFormInputChange("fullName", text)
-        }
-        value={fullName}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Address"
-        onChangeText={(text) =>
-          handleRegistrationFormInputChange("address", text)
-        }
-        value={address}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Contact Number"
-        onChangeText={(text) =>
-          handleRegistrationFormInputChange("contactNumber", text)
-        }
-        value={contactNumber}
-        keyboardType="phone-pad"
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Password"
-        onChangeText={(text) =>
-          handleRegistrationFormInputChange("password", text)
-        }
-        value={password}
-        secureTextEntry={true}
-      />
+      <View style={styles.form}>
+        <Text style={styles.title}>Sign Up</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Full Name"
+          onChangeText={(text) =>
+            handleRegistrationFormInputChange("fullName", text)
+          }
+          value={fullName}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Address"
+          onChangeText={(text) =>
+            handleRegistrationFormInputChange("address", text)
+          }
+          value={address}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Contact Number"
+          onChangeText={(text) =>
+            handleRegistrationFormInputChange("contactNumber", text)
+          }
+          value={contactNumber}
+          keyboardType="phone-pad"
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Password"
+          onChangeText={(text) =>
+            handleRegistrationFormInputChange("password", text)
+          }
+          value={password}
+          secureTextEntry={true}
+        />
 
-      <TextInput
-        style={styles.input}
-        placeholder="Email"
-        onChangeText={(text) =>
-          handleRegistrationFormInputChange("email", text)
-        }
-        value={email}
-        keyboardType="email-address"
-      />
+        <TextInput
+          style={styles.input}
+          placeholder="Email"
+          onChangeText={(text) =>
+            handleRegistrationFormInputChange("email", text)
+          }
+          value={email}
+          keyboardType="email-address"
+        />
+        <Text style={styles.professionText}>Choose your profile picture:</Text>
+        <TouchableOpacity
+          style={styles.uploadButton}
+          onPress={handleImageUpload}
+        >
+          <Text style={styles.uploadButtonText}>Select Image</Text>
+        </TouchableOpacity>
 
-      <Text style={styles.professionText}>Choose your profile picture:</Text>
-      <Button title="Select Image" onPress={handleImageUpload} />
+        <Text style={styles.professionText}>Choose your profession:</Text>
+        <View style={styles.pickerContainer}>
+          <Picker
+            style={styles.picker}
+            selectedValue={profession}
+            onValueChange={(itemValue, itemIndex) =>
+              handleRegistrationFormInputChange("profession", itemValue)
+            }
+          >
+            {professions.map((item, index) => (
+              <Picker.Item key={index} label={item} value={item} />
+            ))}
+          </Picker>
+        </View>
 
-      <Text style={styles.professionText}>Choose your profession:</Text>
-      <Picker
-        style={styles.picker}
-        selectedValue={profession}
-        onValueChange={(itemValue, itemIndex) =>
-          handleRegistrationFormInputChange("profession", itemValue)
-        }
-      >
-        {professions.map((item, index) => (
-          <Picker.Item key={index} label={item} value={item} />
-        ))}
-      </Picker>
-      <Button title="Register" onPress={handleRegisterFormSubmit} />
-      <Text style={styles.professionText}>Already have an account?</Text>
-      <Text style={styles.professionText}>Login here:</Text>
+        <TouchableOpacity
+          style={styles.registerButton}
+          onPress={handleRegisterFormSubmit}
+        >
+          <Text style={styles.registerButtonText}>Register</Text>
+        </TouchableOpacity>
 
-      <Button title="Login" onPress={handleLoginButtonPress} />
+        <View style={styles.loginSection}>
+          <Text style={styles.loginText}>Already have an account?</Text>
+          <TouchableOpacity onPress={handleLoginButtonPress}>
+            <Text style={styles.loginButton}>Login here</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
     </SafeAreaView>
   );
 }
 
+//styling for the signup page
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: "#fff",
     alignItems: "center",
+    paddingTop: 50,
     justifyContent: "center",
-    padding: 20,
+    backgroundColor: "#fff",
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: "bold",
+    marginBottom: 20,
+    display: "flex",
+    justifyContent: "center",
+  },
+  form: {
+    width: "80%",
   },
   input: {
+    height: 50,
     borderWidth: 1,
     borderColor: "#ccc",
-    padding: 10,
-    marginVertical: 10,
-    width: "100%",
+    borderRadius: 5,
+    marginBottom: 20,
+    paddingLeft: 10,
+    fontSize: 16,
   },
-  professionText: {
-    marginVertical: 10,
+  button: {
+    backgroundColor: "#0077FF",
+    height: 50,
+    borderRadius: 5,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  buttonText: {
+    color: "#fff",
+    fontSize: 18,
     fontWeight: "bold",
   },
-  picker: {
-    width: "100%",
-    height: 50,
+  loginSection: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: 20,
+  },
+  loginText: {
+    fontSize: 16,
+  },
+  loginButton: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: "#0077FF",
+    marginLeft: 5,
+  },
+  professionText: {
+    fontSize: 18,
+    fontWeight: "bold",
     marginBottom: 10,
+  },
+  uploadButton: {
+    backgroundColor: "#0077FF",
+    height: 50,
+    borderRadius: 5,
+    alignItems: "center",
+    justifyContent: "center",
+    marginBottom: 20,
+  },
+  uploadButtonText: {
+    color: "#fff",
+    fontSize: 18,
+    fontWeight: "bold",
+  },
+  pickerContainer: {
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 5,
+    marginBottom: 20,
+  },
+  picker: {
+    height: 50,
+    fontSize: 16,
+  },
+  registerButton: {
+    backgroundColor: "#0077FF",
+    height: 50,
+    borderRadius: 5,
+    alignItems: "center",
+    justifyContent: "center",
+    marginBottom: 20,
+  },
+  registerButtonText: {
+    color: "#fff",
+    fontSize: 18,
+    fontWeight: "bold",
+  },
+  loginSection: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  loginText: {
+    fontSize: 16,
+    marginRight: 5,
+  },
+  loginButton: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: "#0077FF",
   },
 });

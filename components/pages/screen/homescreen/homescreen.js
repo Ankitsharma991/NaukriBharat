@@ -61,15 +61,23 @@ export default function HomeScreen() {
 
   return (
     <View style={styles.container}>
+      <View style={styles.header}>
+        {/* <View style={styles.headerItemsContainer}> */}
+          <TouchableOpacity
+            style={styles.menuButton}
+            onPress={handleMenuButtonClick}
+          >
+            <Ionicons name="menu-outline" size={40} color="black" />
+          </TouchableOpacity>
+          <TextInput
+            placeholder="Post a requirement"
+            style={styles.inputField}
+          />
+          <Text style={styles.postText}>Post</Text>
+          <Ionicons name="person-circle-outline" size={40} color="black" />
+        </View>
+      {/* </View> */}
       {/* Menu icon on the upper left */}
-      <TouchableOpacity style={styles.menuButton} onPress={handleMenuButtonClick}>
-        <Ionicons name="menu-outline" size={40} color="black" />
-      </TouchableOpacity>
-
-      {/* Profile icon on the upper right */}
-      <TouchableOpacity style={styles.profileButton} onPress={handleProfileButtonClick}>
-        <Ionicons name="person-circle-outline" size={40} color="black" />
-      </TouchableOpacity>
 
       <View style={styles.fullScreen}>
         <User />
@@ -94,51 +102,50 @@ export default function HomeScreen() {
           }}
         />
       </View>
-      <View style={styles.postRequirement}>
-        <TextInput placeholder="Post a requirement" style={styles.inputField} />
-        <TouchableOpacity style={styles.postButton} onPress={handlePostButtonClick}>
-          <Text style={styles.postText}>Post</Text>
-        </TouchableOpacity>
-      </View>
     </View>
   );
 }
 
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingHorizontal: 20,
-    paddingTop: 50,
+    display: "flex",
     position: "relative",
     backgroundColor: "#ffc0cb",
-
   },
+  header: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-around",
+  },
+
+  headerItemsContainer: {
+    display: "flex",
+    justifyContent: "space-between",
+    flexDirection: "row",
+    alignItems: "center",
+  },
+
   menuButton: {
-    position: "absolute",
-    top: 10,
-    left: 5,
-    padding: 5,
-
+    // marginRight:,
   },
-  profileButton: {
-    position: "absolute",
-    top: 10,
-    right: 10,
-    padding: 10,
-
-  },
+  // profileButton: {
+  //   position: "absolute",
+  //   top: 10,
+  //   right: 10,
+  //   padding: 10,
+  // },
   fullScreen: {
     flex: 1,
     alignItems: "stretch",
     justifyContent: "center",
-    marginHorizontal: -40,
+    // marginHorizontal: -40,
   },
   body: {
     flex: 2,
     alignItems: "center",
     justifyContent: "center",
-
   },
   title: {
     fontSize: 24,
@@ -156,13 +163,11 @@ const styles = StyleSheet.create({
     right: 5,
     padding: 10,
     marginBottom: 10,
-
   },
   postRequirement: {
     position: "absolute",
     top: 18,
     left: 50,
-
   },
   inputField: {
     height: 30,
@@ -171,7 +176,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 10,
     margin: 4,
-
   },
   postButton: {
     position: "absolute",
@@ -182,6 +186,5 @@ const styles = StyleSheet.create({
     width: 50,
     borderRadius: 10,
     left: 210,
-
   },
 });
